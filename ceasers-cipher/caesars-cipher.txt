@@ -1,0 +1,18 @@
+function rot13(str) {
+  const shift = 13;
+  var solStr ="";
+  for (var i=0; i<str.length; i++){
+    var curChar = str.charAt(i);
+    var curCharUni = curChar.charCodeAt(0); 
+    if ((curCharUni>77 && curCharUni<=90) || ( curCharUni>109 && curCharUni<=122)){
+    solStr += String.fromCharCode(str.charAt(i).charCodeAt(0)-shift);
+    } else if ((curCharUni>64 && curCharUni<=77) || (curCharUni>96 && curCharUni<=109)){
+      solStr += String.fromCharCode(curCharUni+shift);
+    } else{
+      solStr+=curChar;
+    }
+  }
+  return solStr;
+}
+
+rot13("SERR PBQR PNZC");
