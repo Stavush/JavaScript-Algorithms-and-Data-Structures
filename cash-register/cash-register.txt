@@ -1,0 +1,48 @@
+function checkCashRegister(price, cash, cid) {
+  var currencyMat = {
+    'PENNY' : 0.01,
+    'NICKLE' : 0.05,
+    'DIME' : 0.1,
+    'QUARTER' : 0.25,
+    'ONE' : 1,
+    'FIVE' : 5,
+    'TEN' : 10,
+    'TWENTY' : 20,
+    'ONE HUNDRED' : 100
+  };
+  let cashierStat = {status: 'OPEN', change: []}; // object of cash in the begining
+  var change = cash - price; // change to return
+  var totalCID = cid.reduce((sum, coin) => sum+(coin[1]),0).toFixed(2); // counts how much many there's in the cash register
+  var j = (cid.length) - 1; // size of the cid array
+
+  if (totalCID < change){
+    cashierStat.status = 'INSUFFICIENT_FUNDS';
+  } else if (totalCID == change){
+    cashierStat.status = 'CLOSED';
+    cashierStat.change = cid;
+  }  else {
+    var count = 0;
+    while (change > 0 && j>=0){
+
+      var curUnit = currencyMat[cid[j][0]];
+      while (change - curUnit >= 0 && cid[j][1] > 0){ // if after subtructing the coin from the change there's still change left
+        count++;
+        change = (change-curUnit).toFixed(2); // subtruct the coin rate from the change
+        cid[j][1] -= curUnit; // sub from ths cid array
+      }
+      if (count > 0){
+        cashierStat.change.push([ cid[j][0], count*curUnit ]);
+      }
+      count = 0;
+      j--;
+    }
+    if (change > 0){
+      cashierStat.status = "INSUFFICIENT_FUNDS";
+      cashierStat.change = [];
+    }
+  }
+  
+  return cashierStat;
+}
+
+checkCashRegister(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]);
